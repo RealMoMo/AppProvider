@@ -1,0 +1,2 @@
+include ':app', ':hhtproviderlib'
+rootProject.name='HHTProvider'
