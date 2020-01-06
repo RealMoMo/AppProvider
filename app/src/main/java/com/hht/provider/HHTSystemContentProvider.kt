@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
+import android.util.Log
 import com.tencent.mmkv.MMKV
 
 /**
@@ -20,6 +21,7 @@ class HHTSystemContentProvider : ContentProvider() {
 
     companion object {
         const val NULL = "null"
+        const val TAG = "hhtprovider"
 
         val lock = Any()
         const val PROVIDER_VERSION = "provider_version"
@@ -139,6 +141,7 @@ class HHTSystemContentProvider : ContentProvider() {
     }
 
     override fun onCreate(): Boolean {
+        Log.v(TAG,"init")
         MMKV.initialize(context)
         synchronized(lock){
             //TODO version check and migrate data

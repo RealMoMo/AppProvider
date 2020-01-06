@@ -18,7 +18,7 @@ import android.util.Log;
  */
 public class HHTSetting {
 
-    private static final String TAG  = "realmo";
+    private static final String TAG  = "provider_lib";
 
     private static final String TRUE_STR = "1";
     private static final String FALSE_STR = "0";

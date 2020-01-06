@@ -15,10 +15,30 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    //系统签名配置
+    signingConfigs {
+        debugConfig {
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+            storeFile file("../key/hht.keystore")
+            storePassword "android"
+        }
+        releaseConfig {
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+            storeFile file("../key/hht.keystore")
+            storePassword "android"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseConfig
+        }
+        debug {
+            signingConfig signingConfigs.debugConfig
         }
     }
 
