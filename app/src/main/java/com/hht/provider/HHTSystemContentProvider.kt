@@ -1,11 +1,11 @@
 package com.hht.provider
 
 import android.content.ContentProvider
-import android.content.ContentUris
 import android.content.ContentValues
-import android.content.UriMatcher
 import android.database.Cursor
+import android.database.MatrixCursor
 import android.net.Uri
+import com.tencent.mmkv.MMKV
 
 /**
  * @name HHTSystemContentProvider
@@ -19,7 +19,13 @@ class HHTSystemContentProvider : ContentProvider() {
 
 
     companion object {
-        val matcher: UriMatcher
+        const val NULL = "null"
+
+        val lock = Any()
+        const val PROVIDER_VERSION = "provider_version"
+        const val CURRENT_VERSION = 1
+        //val matcher: UriMatcher
+
         const val AUTHORITIES = "com.hht.function"
 
         const val TABLE_SYSTEM_FUNCTION = 100
@@ -44,96 +50,99 @@ class HHTSystemContentProvider : ContentProvider() {
         const val TABLE_OTHER_FUNCTION_WITH_ID = 116
 
 
-        val matcherMap: HashMap<Int, String>
+        //val matcherMap: HashMap<Int, String>
 
 
         init {
-            matcher = UriMatcher(UriMatcher.NO_MATCH)
-            matcherMap = HashMap()
-
-            matcher.addURI(AUTHORITIES, HHTProviderHelper.SYSTEM_TABLE, TABLE_SYSTEM_FUNCTION)
-            //  # 代表数字 * 代表字符串
-            matcher.addURI(
-                AUTHORITIES,
-                HHTProviderHelper.SYSTEM_TABLE + "/#",
-                TABLE_SYSTEM_FUNCTION_WITH_ID
-            )
-            matcherMap.put(TABLE_SYSTEM_FUNCTION, HHTProviderHelper.SYSTEM_TABLE)
-            matcherMap.put(TABLE_SYSTEM_FUNCTION_WITH_ID, HHTProviderHelper.SYSTEM_TABLE)
-
-            matcher.addURI(AUTHORITIES, HHTProviderHelper.SECURE_TABLE, TABLE_SERCURE_FUNCTION)
-            //  # 代表数字 * 代表字符串
-            matcher.addURI(
-                AUTHORITIES,
-                HHTProviderHelper.SECURE_TABLE + "/#",
-                TABLE_SERCURE_FUNCTION_WITH_ID
-            )
-            matcherMap.put(TABLE_SERCURE_FUNCTION, HHTProviderHelper.SECURE_TABLE)
-            matcherMap.put(TABLE_SERCURE_FUNCTION_WITH_ID, HHTProviderHelper.SECURE_TABLE)
-
-            matcher.addURI(AUTHORITIES, HHTProviderHelper.SOURCE_TABLE, TABLE_SOURCE_FUNCTION)
-            //  # 代表数字 * 代表字符串
-            matcher.addURI(
-                AUTHORITIES,
-                HHTProviderHelper.SOURCE_TABLE + "/#",
-                TABLE_SOURCE_FUNCTION_WITH_ID
-            )
-            matcherMap.put(TABLE_SOURCE_FUNCTION, HHTProviderHelper.SOURCE_TABLE)
-            matcherMap.put(TABLE_SOURCE_FUNCTION_WITH_ID, HHTProviderHelper.SOURCE_TABLE)
-
-            matcher.addURI(
-                AUTHORITIES,
-                HHTProviderHelper.WHITEBOARD_TABLE,
-                TABLE_WHITEBOARD_FUNCTION
-            )
-            //  # 代表数字 * 代表字符串
-            matcher.addURI(
-                AUTHORITIES,
-                HHTProviderHelper.WHITEBOARD_TABLE + "/#",
-                TABLE_WHITEBOARD_FUNCTION_WITH_ID
-            )
-            matcherMap.put(TABLE_WHITEBOARD_FUNCTION, HHTProviderHelper.WHITEBOARD_TABLE)
-            matcherMap.put(TABLE_WHITEBOARD_FUNCTION_WITH_ID, HHTProviderHelper.WHITEBOARD_TABLE)
-
-            matcher.addURI(AUTHORITIES, HHTProviderHelper.TOOLBAR_TABLE, TABLE_TOOLBAR_FUNCTION)
-            //  # 代表数字 * 代表字符串
-            matcher.addURI(
-                AUTHORITIES,
-                HHTProviderHelper.TOOLBAR_TABLE + "/#",
-                TABLE_TOOLBAR_FUNCTION_WITH_ID
-            )
-            matcherMap.put(TABLE_TOOLBAR_FUNCTION, HHTProviderHelper.TOOLBAR_TABLE)
-            matcherMap.put(TABLE_TOOLBAR_FUNCTION_WITH_ID, HHTProviderHelper.TOOLBAR_TABLE)
-
-            matcher.addURI(AUTHORITIES, HHTProviderHelper.TIME_TABLE, TABLE_TIME_FUNCTION)
-            //  # 代表数字 * 代表字符串
-            matcher.addURI(
-                AUTHORITIES,
-                HHTProviderHelper.TIME_TABLE + "/#",
-                TABLE_TIME_FUNCTION_WITH_ID
-            )
-            matcherMap.put(TABLE_TIME_FUNCTION, HHTProviderHelper.TIME_TABLE)
-            matcherMap.put(TABLE_TIME_FUNCTION_WITH_ID, HHTProviderHelper.TIME_TABLE)
-
-            matcher.addURI(AUTHORITIES, HHTProviderHelper.OTHER_TABLE, TABLE_OTHER_FUNCTION)
-            //  # 代表数字 * 代表字符串
-            matcher.addURI(
-                AUTHORITIES,
-                HHTProviderHelper.OTHER_TABLE + "/#",
-                TABLE_OTHER_FUNCTION_WITH_ID
-            )
-            matcherMap.put(TABLE_OTHER_FUNCTION, HHTProviderHelper.OTHER_TABLE)
-            matcherMap.put(TABLE_OTHER_FUNCTION_WITH_ID, HHTProviderHelper.OTHER_TABLE)
+//            matcher = UriMatcher(UriMatcher.NO_MATCH)
+//            matcherMap = HashMap()
+//
+//            matcher.addURI(AUTHORITIES, HHTProviderHelper.SYSTEM_TABLE, TABLE_SYSTEM_FUNCTION)
+//            //  # 代表数字 * 代表字符串
+//            matcher.addURI(
+//                AUTHORITIES,
+//                HHTProviderHelper.SYSTEM_TABLE + "/#",
+//                TABLE_SYSTEM_FUNCTION_WITH_ID
+//            )
+//            matcherMap.put(TABLE_SYSTEM_FUNCTION, HHTProviderHelper.SYSTEM_TABLE)
+//            matcherMap.put(TABLE_SYSTEM_FUNCTION_WITH_ID, HHTProviderHelper.SYSTEM_TABLE)
+//
+//            matcher.addURI(AUTHORITIES, HHTProviderHelper.SECURE_TABLE, TABLE_SERCURE_FUNCTION)
+//            //  # 代表数字 * 代表字符串
+//            matcher.addURI(
+//                AUTHORITIES,
+//                HHTProviderHelper.SECURE_TABLE + "/#",
+//                TABLE_SERCURE_FUNCTION_WITH_ID
+//            )
+//            matcherMap.put(TABLE_SERCURE_FUNCTION, HHTProviderHelper.SECURE_TABLE)
+//            matcherMap.put(TABLE_SERCURE_FUNCTION_WITH_ID, HHTProviderHelper.SECURE_TABLE)
+//
+//            matcher.addURI(AUTHORITIES, HHTProviderHelper.SOURCE_TABLE, TABLE_SOURCE_FUNCTION)
+//            //  # 代表数字 * 代表字符串
+//            matcher.addURI(
+//                AUTHORITIES,
+//                HHTProviderHelper.SOURCE_TABLE + "/#",
+//                TABLE_SOURCE_FUNCTION_WITH_ID
+//            )
+//            matcherMap.put(TABLE_SOURCE_FUNCTION, HHTProviderHelper.SOURCE_TABLE)
+//            matcherMap.put(TABLE_SOURCE_FUNCTION_WITH_ID, HHTProviderHelper.SOURCE_TABLE)
+//
+//            matcher.addURI(
+//                AUTHORITIES,
+//                HHTProviderHelper.WHITEBOARD_TABLE,
+//                TABLE_WHITEBOARD_FUNCTION
+//            )
+//            //  # 代表数字 * 代表字符串
+//            matcher.addURI(
+//                AUTHORITIES,
+//                HHTProviderHelper.WHITEBOARD_TABLE + "/#",
+//                TABLE_WHITEBOARD_FUNCTION_WITH_ID
+//            )
+//            matcherMap.put(TABLE_WHITEBOARD_FUNCTION, HHTProviderHelper.WHITEBOARD_TABLE)
+//            matcherMap.put(TABLE_WHITEBOARD_FUNCTION_WITH_ID, HHTProviderHelper.WHITEBOARD_TABLE)
+//
+//            matcher.addURI(AUTHORITIES, HHTProviderHelper.TOOLBAR_TABLE, TABLE_TOOLBAR_FUNCTION)
+//            //  # 代表数字 * 代表字符串
+//            matcher.addURI(
+//                AUTHORITIES,
+//                HHTProviderHelper.TOOLBAR_TABLE + "/#",
+//                TABLE_TOOLBAR_FUNCTION_WITH_ID
+//            )
+//            matcherMap.put(TABLE_TOOLBAR_FUNCTION, HHTProviderHelper.TOOLBAR_TABLE)
+//            matcherMap.put(TABLE_TOOLBAR_FUNCTION_WITH_ID, HHTProviderHelper.TOOLBAR_TABLE)
+//
+//            matcher.addURI(AUTHORITIES, HHTProviderHelper.TIME_TABLE, TABLE_TIME_FUNCTION)
+//            //  # 代表数字 * 代表字符串
+//            matcher.addURI(
+//                AUTHORITIES,
+//                HHTProviderHelper.TIME_TABLE + "/#",
+//                TABLE_TIME_FUNCTION_WITH_ID
+//            )
+//            matcherMap.put(TABLE_TIME_FUNCTION, HHTProviderHelper.TIME_TABLE)
+//            matcherMap.put(TABLE_TIME_FUNCTION_WITH_ID, HHTProviderHelper.TIME_TABLE)
+//
+//            matcher.addURI(AUTHORITIES, HHTProviderHelper.OTHER_TABLE, TABLE_OTHER_FUNCTION)
+//            //  # 代表数字 * 代表字符串
+//            matcher.addURI(
+//                AUTHORITIES,
+//                HHTProviderHelper.OTHER_TABLE + "/#",
+//                TABLE_OTHER_FUNCTION_WITH_ID
+//            )
+//            matcherMap.put(TABLE_OTHER_FUNCTION, HHTProviderHelper.OTHER_TABLE)
+//            matcherMap.put(TABLE_OTHER_FUNCTION_WITH_ID, HHTProviderHelper.OTHER_TABLE)
         }
     }
 
     lateinit var dbHelper: HHTProviderHelper
-
+    val mmkv by lazy {
+        MMKV.defaultMMKV()
+    }
 
     override fun onCreate(): Boolean {
-        dbHelper = HHTProviderHelper(context)
-        if (dbHelper != null) {
-            return true
+        MMKV.initialize(context)
+        synchronized(lock){
+            //TODO version check and migrate data
+            migrationData()
         }
         return false
 
@@ -146,44 +155,19 @@ class HHTSystemContentProvider : ContentProvider() {
         selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? {
-        val matchType = matcher.match(uri)
-        val db = dbHelper.writableDatabase
-        var cursor: Cursor? = null
-        when (matchType) {
-            in TABLE_SYSTEM_FUNCTION..TABLE_OTHER_FUNCTION -> {
-                cursor = db.query(
-                    matcherMap.get(matchType), projection, selection,
-                    selectionArgs, null, null, sortOrder
-                )
-            }
-            else -> {
-                val id = ContentUris.parseId(uri)
-                var where = "_id=" + id
-                if (selection != null) {
-                    where = " and " + selection
-                }
-                cursor = db.query(
-                    matcherMap.get(matchType), projection, where,
-                    selectionArgs, null, null, sortOrder
-                )
-            }
+        synchronized(lock){
+            val key = projection?.get(0)
+            mmkv.decodeString(key,NULL)
+            val cursor: MatrixCursor = MatrixCursor(projection,1)
+            cursor.addRow(arrayOf(mmkv.decodeString(key,NULL)))
+            cursor.setNotificationUri(context.contentResolver, uri)
+            return cursor
         }
-        cursor?.setNotificationUri(context.contentResolver, uri)
-        return cursor
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        val matchType = matcher.match(uri)
-        val db = dbHelper.writableDatabase
-        var id: Long = -1
-        when (matchType) {
-            in TABLE_SYSTEM_FUNCTION..TABLE_OTHER_FUNCTION -> {
-                id = db.insert(matcherMap.get(matchType), null, values)
-            }
-        }
-        val result = ContentUris.withAppendedId(uri, id)
-        context.contentResolver.notifyChange(uri, null)
-        return result
+
+        return uri
     }
 
     override fun update(
@@ -192,49 +176,62 @@ class HHTSystemContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<String>?
     ): Int {
-        val matchType = matcher.match(uri)
-        val db = dbHelper.writableDatabase
-        var updateCount = 0
-        when (matchType) {
-            in TABLE_SYSTEM_FUNCTION..TABLE_OTHER_FUNCTION -> {
-                updateCount =
-                    db.update(matcherMap.get(matchType), values, selection, selectionArgs)
-            }
-            else -> {
-                val id = ContentUris.parseId(uri)
-                var where = "_id=" + id
-                if (selection != null) {
-                    where = " and " + selection
-                }
-                updateCount = db.update(matcherMap.get(matchType), values, where, selectionArgs)
+        synchronized(lock) {
+            val key = values?.get("key") as String
+            val value = values?.get("value") as String
+            val success = mmkv.encode(key, value)
+
+            context.contentResolver.notifyChange(Uri.withAppendedPath(uri, key), null)
+            return if (success) {
+                1
+            } else {
+                0
             }
         }
-        context.contentResolver.notifyChange(uri, null)
-        return updateCount
     }
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
-        val matchType = matcher.match(uri)
-        val db = dbHelper.writableDatabase
-        var delCount = 0
-        when (matchType) {
-            in TABLE_SYSTEM_FUNCTION..TABLE_OTHER_FUNCTION -> {
-                delCount = db.delete(matcherMap.get(matchType), selection, selectionArgs)
-            }
-            else -> {
-                val id = ContentUris.parseId(uri)
-                var where = "_id=" + id
-                if (selection != null) {
-                    where = " and " + selection
-                }
-                delCount = db.delete(matcherMap.get(matchType), where, selectionArgs)
-            }
-        }
-        context.contentResolver.notifyChange(uri, null)
-        return delCount
+
+        return 0
     }
 
     override fun getType(uri: Uri): String? {
         return null
+    }
+
+    /**
+     * 迁移数据
+     */
+    private fun migrationData(){
+
+        //
+        if(mmkv.containsKey(PROVIDER_VERSION)){
+            val systemProviderVersion = mmkv.decodeInt(PROVIDER_VERSION)
+            if(systemProviderVersion == CURRENT_VERSION){
+                return
+            }else{
+                doRealMigrationData(systemProviderVersion,CURRENT_VERSION)
+
+                mmkv.encode(PROVIDER_VERSION, CURRENT_VERSION)
+            }
+        }else{
+            //没有Version数据，是第一次加载数据库。需初始化数据。
+            initNewestProviderData()
+
+            mmkv.encode(PROVIDER_VERSION, CURRENT_VERSION)
+        }
+    }
+
+
+
+    private fun doRealMigrationData(oldVersion:Int,newVersion:Int){
+
+    }
+
+    /**
+     * 初始化最新版本Provider数据
+     */
+    private fun initNewestProviderData() {
+
     }
 }

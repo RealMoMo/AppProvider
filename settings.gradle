@@ -1,2 +1,2 @@
-include ':app', ':hhtproviderlib'
+include ':app', ':hhtproviderlib', ':test'
 rootProject.name='HHTProvider'

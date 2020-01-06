@@ -3,7 +3,6 @@ package com.hht.provider
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import java.util.logging.Level.CONFIG
 
 /**
  * @name HHTProviderHelper
@@ -13,6 +12,7 @@ import java.util.logging.Level.CONFIG
  * @time 2020/1/2 19:28
  * @describe
  */
+@Deprecated("sqlite方案不用")
 class HHTProviderHelper : SQLiteOpenHelper{
 
 
@@ -65,76 +65,81 @@ class HHTProviderHelper : SQLiteOpenHelper{
     override fun onCreate(db: SQLiteDatabase?) {
         //TODO using stringbuilder
 
-        //system table
-        db?.execSQL("CREATE TABLE IF NOT EXISTS " + SYSTEM_TABLE + "(" + //
-                "_id INTEGER PRIMARY KEY AUTOINCREMENT ," +
-                "theme_type INTEGER NOT NULL ," +
-                "theme_res_path INTEGER NOT NULL ," +
-                "date_format TEXT NOT NULL )");
-
-        //secure table
-        db?.execSQL("CREATE TABLE IF NOT EXISTS " + SECURE_TABLE + "(" + //
-                "_id INTEGER PRIMARY KEY AUTOINCREMENT ," +
-                "lock_screen_master_passkey TEXT NOT NULL ," +
-                "lock_screen_passkey TEXT NOT NULL ," +
-                "quicksetting_enable INTEGER NOT NULL ," +
-                "clear_file_time INTEGER NOT NULL ," +
-                "ota_servce_enviroment INTEGER NOT NULL )")
 
 
-        //source table
-        db?.execSQL("CREATE TABLE IF NOT EXISTS " + SOURCE_TABLE + "(" + //
-                "_id INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "current_source_ordinal INTEGER NOT NULL ," +
-                "current_source_type TEXT NOT NULL ," +
-                "favorite_source_ordinal INTEGER NOT NULL ," +
-                "favorite_source_type TEXT NOT NULL ," +
-                "last_source_ordinal INTEGER NOT NULL ," +
-                "last_source_type TEXT NOT NULL ," +
-                "home_source_type INTEGER NOT NULL ," +
-                "pc_rename TEXT NOT NULL ," +
-                "hdmi_front_rename TEXT NOT NULL ," +
-                "hdmi1_rename TEXT NOT NULL ," +
-                "hdmi2_rename TEXT NOT NULL ," +
-                "hdmi3_rename TEXT NOT NULL ," +
-                "type_c_rename TEXT NOT NULL ," +
-                "vga_rename TEXT NOT NULL ," +
-                "dp_rename TEXT NOT NULL )")
 
-
-        //whiteboard table
-        db?.execSQL("CREATE TABLE IF NOT EXISTS " + WHITEBOARD_TABLE + "(" + //
-                "_id INTEGER PRIMARY KEY AUTOINCREMENT ," +
-                "is_annotationing INTEGER NOT NULL ," +
-                "writing_protection INTEGER NOT NULL )")
-
-
-        //toolbar table
-        db?.execSQL("CREATE TABLE IF NOT EXISTS " + TOOLBAR_TABLE + "(" + //
-                "_id INTEGER PRIMARY KEY AUTOINCREMENT ," +
-                "left_bar_open INTEGER NOT NULL ," +
-                "right_bar_open INTEGER NOT NULL ," +
-                "bar_open INTEGER NOT NULL ," +
-                "bar_size INTEGER NOT NULL )")
-
-
-        //time table
-//        db?.execSQL("CREATE TABLE IF NOT EXISTS " + TIME_TABLE + "(" + //
+//        //system table
+//        db?.execSQL("CREATE TABLE IF NOT EXISTS " + SYSTEM_TABLE + "(" + //
+//                "_id INTEGER PRIMARY KEY AUTOINCREMENT ," +
+//                "theme_type INTEGER NOT NULL ," +
+//                "theme_res_path INTEGER NOT NULL ," +
+//                "date_format TEXT NOT NULL )");
+//
+//        //secure table
+//        db?.execSQL("CREATE TABLE IF NOT EXISTS " + SECURE_TABLE + "(" + //
+//                "_id INTEGER PRIMARY KEY AUTOINCREMENT ," +
+//                "lock_screen_master_passkey TEXT NOT NULL ," +
+//                "lock_screen_passkey TEXT NOT NULL ," +
+//                "lock_screen_status INTEGER NOT NULL ," +
+//                "quicksetting_enable INTEGER NOT NULL ," +
+//                "setting_enable INTEGER NOT NULL ," +
+//                "clear_file_time INTEGER NOT NULL ," +
+//                "ota_servce_enviroment INTEGER NOT NULL )")
+//
+//
+//        //source table
+//        db?.execSQL("CREATE TABLE IF NOT EXISTS " + SOURCE_TABLE + "(" + //
 //                "_id INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-//                "BAR_HIDEN INTEGER NOT NULL ," + // 1: bar hiden
-//                "BAR_SIZE INTEGER NOT NULL ," + // 2: bar size
-//                "SOURCE_MENU_KEY INTEGER NOT NULL ," + // 3: sourcemenu key
-//                "SOURCE_MENU_VALUE TEXT NOT NULL )")  // 4: sourcemenu value
-
-
-        //other table
-        db?.execSQL("CREATE TABLE IF NOT EXISTS " + OTHER_TABLE + "(" + //
-                "_id INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "freeze INTEGER NOT NULL ," +
-                "pause INTEGER NOT NULL ," +
-                "sound_only INTEGER NOT NULL ," +
-                "bluelight_filter INTEGER NOT NULL ," +
-                "bluelight_filter_value INTEGER NOT NULL  )")
+//                "current_source_ordinal INTEGER NOT NULL ," +
+//                "current_source_type TEXT NOT NULL ," +
+//                "favorite_source_ordinal INTEGER NOT NULL ," +
+//                "favorite_source_type TEXT NOT NULL ," +
+//                "last_source_ordinal INTEGER NOT NULL ," +
+//                "last_source_type TEXT NOT NULL ," +
+//                "home_source_type INTEGER NOT NULL ," +
+//                "pc_rename TEXT NOT NULL ," +
+//                "hdmi_front_rename TEXT NOT NULL ," +
+//                "hdmi1_rename TEXT NOT NULL ," +
+//                "hdmi2_rename TEXT NOT NULL ," +
+//                "hdmi3_rename TEXT NOT NULL ," +
+//                "type_c_rename TEXT NOT NULL ," +
+//                "vga_rename TEXT NOT NULL ," +
+//                "dp_rename TEXT NOT NULL )")
+//
+//
+//        //whiteboard table
+//        db?.execSQL("CREATE TABLE IF NOT EXISTS " + WHITEBOARD_TABLE + "(" + //
+//                "_id INTEGER PRIMARY KEY AUTOINCREMENT ," +
+//                "is_annotationing INTEGER NOT NULL ," +
+//                "writing_protection INTEGER NOT NULL )")
+//
+//
+//        //toolbar table
+//        db?.execSQL("CREATE TABLE IF NOT EXISTS " + TOOLBAR_TABLE + "(" + //
+//                "_id INTEGER PRIMARY KEY AUTOINCREMENT ," +
+//                "left_bar_open INTEGER NOT NULL ," +
+//                "right_bar_open INTEGER NOT NULL ," +
+//                "bar_open INTEGER NOT NULL ," +
+//                "bar_size INTEGER NOT NULL )")
+//
+//
+//        //time table
+////        db?.execSQL("CREATE TABLE IF NOT EXISTS " + TIME_TABLE + "(" + //
+////                "_id INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+////                "BAR_HIDEN INTEGER NOT NULL ," + // 1: bar hiden
+////                "BAR_SIZE INTEGER NOT NULL ," + // 2: bar size
+////                "SOURCE_MENU_KEY INTEGER NOT NULL ," + // 3: sourcemenu key
+////                "SOURCE_MENU_VALUE TEXT NOT NULL )")  // 4: sourcemenu value
+//
+//
+//        //other table
+//        db?.execSQL("CREATE TABLE IF NOT EXISTS " + OTHER_TABLE + "(" + //
+//                "_id INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+//                "freeze INTEGER NOT NULL ," +
+//                "pause INTEGER NOT NULL ," +
+//                "sound_only INTEGER NOT NULL ," +
+//                "bluelight_filter INTEGER NOT NULL ," +
+//                "bluelight_filter_value INTEGER NOT NULL  )")
 
 
 
